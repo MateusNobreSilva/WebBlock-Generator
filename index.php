@@ -86,7 +86,7 @@ include 'components/header.php';
 
                 <div class="row mt-2" id="<?= $sectionId ?>">
                     <?php foreach ($lista as $nome => $dominio):
-  
+
                         $id = "d_" . md5($categoria . '|' . $nome . '|' . $dominio);
                     ?>
                         <div class="col-md-4 mb-3">
@@ -97,7 +97,12 @@ include 'components/header.php';
                                         name="domains[]"
                                         value="<?= htmlspecialchars($dominio) ?>"
                                         id="<?= $id ?>">
-                                    <label class="form-check-label fw-semibold" for="<?= $id ?>">
+                                    <label class="form-check-label fw-semibold d-flex align-items-center gap-2" for="<?= $id ?>">
+                                        <img
+                                            src="https://www.google.com/s2/favicons?sz=32&domain=<?= urlencode($dominio) ?>"
+                                            width="20"
+                                            height="20"
+                                            alt="icon">
                                         <?= htmlspecialchars($nome) ?>
                                     </label>
                                 </div>
