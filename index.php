@@ -12,6 +12,23 @@ function normalizeDomain($s)
     return strtolower($s);
 }
 
+$jsonPath = __DIR__ . "/data/sites.json";
+
+if (!file_exists($jsonPath)) {
+    die("sites.json not found.");
+}
+
+$json = file_get_contents($jsonPath);
+$sites = json_decode($json, true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    die("JSON Error: " . json_last_error_msg());
+}
+
+if (!is_array($sites)) {
+    die("Invalid JSON structure.");
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $selected = $_POST["domains"] ?? [];
     $set = [];
@@ -32,28 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
-$sites = [
-    "Redes Sociais" => [
-        ["nome" => "Instagram", "dominio" => ".instagram.com"],
-        ["nome" => "Facebook", "dominio" => ".facebook.com"],
-        ["nome" => "TikTok", "dominio" => ".tiktok.com"],
-    ],
-    "Jogos" => [
-        ["nome" => "Click Jogos", "dominio" => ".clickjogos.com.br"],
-        ["nome" => "Ojogos", "dominio" => ".ojogos.com.br"],
-        ["nome" => "Poki", "dominio" => ".poki.com"],
-        ["nome" => "Friv", "dominio" => ".friv.com"],
-        ["nome" => "CrazyGames", "dominio" => ".crazygames.com"],
-        ["nome" => "Krunker", "dominio" => ".krunker.io"],
-        ["nome" => "Gartic", "dominio" => ".gartic.io"],
-    ],
-    "Esporte / Streaming" => [
-        ["nome" => "Futemax", "dominio" => ".futemax"],
-        ["nome" => "Multicanais", "dominio" => ".multicanais"],
-        ["nome" => "Flashscore", "dominio" => ".flashscore.com"],
-    ],
-];
-
 include 'components/header.php';
 ?>
 
@@ -67,6 +62,8 @@ include 'components/header.php';
 
             <?php foreach ($sites as $categoria => $lista):
                 $sectionId = "sec_" . md5($categoria);
+
+                if (!is_array($lista)) continue;
             ?>
 
                 <div class="d-flex justify-content-between align-items-center mt-4">
@@ -88,8 +85,9 @@ include 'components/header.php';
                 </div>
 
                 <div class="row mt-2" id="<?= $sectionId ?>">
-                    <?php foreach ($lista as $site):
-                        $id = "d_" . md5($site['dominio']);
+                    <?php foreach ($lista as $nome => $dominio):
+  
+                        $id = "d_" . md5($categoria . '|' . $nome . '|' . $dominio);
                     ?>
                         <div class="col-md-4 mb-3">
                             <div class="border rounded p-3 h-100 shadow-sm site-card">
@@ -97,13 +95,13 @@ include 'components/header.php';
                                     <input class="form-check-input"
                                         type="checkbox"
                                         name="domains[]"
-                                        value="<?= htmlspecialchars($site['dominio']) ?>"
+                                        value="<?= htmlspecialchars($dominio) ?>"
                                         id="<?= $id ?>">
                                     <label class="form-check-label fw-semibold" for="<?= $id ?>">
-                                        <?= htmlspecialchars($site['nome']) ?>
+                                        <?= htmlspecialchars($nome) ?>
                                     </label>
                                 </div>
-                                <div class="text-muted small mt-1"><?= htmlspecialchars($site['dominio']) ?></div>
+                                <div class="text-muted small mt-1"><?= htmlspecialchars($dominio) ?></div>
                             </div>
                         </div>
                     <?php endforeach; ?>
