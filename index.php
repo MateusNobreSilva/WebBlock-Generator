@@ -1,19 +1,27 @@
 <?php
 
+// ======= CONFIG =======
+$squidBlockFile = "/etc/squid/bloqueios.txt"; // ajuste se o nome/caminho for outro
+$jsonPath = __DIR__ . "/data/sites.json";
+
+// ======= FUNÇÕES =======
 function normalizeDomain($s)
 {
     $s = trim($s);
     if ($s === "") return "";
+
     $s = preg_replace('#^https?://#i', '', $s);
+
     $s = explode('/', $s)[0];
     $s = trim($s);
     if ($s === "") return "";
+
     if ($s[0] !== '.') $s = '.' . $s;
+
     return strtolower($s);
 }
 
-$jsonPath = __DIR__ . "/data/sites.json";
-
+// ======= CARREGA JSON =======
 if (!file_exists($jsonPath)) {
     die("sites.json not found.");
 }
@@ -29,6 +37,7 @@ if (!is_array($sites)) {
     die("Invalid JSON structure.");
 }
 
+// ======= GERA ARQUIVO =======
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $selected = $_POST["domains"] ?? [];
     $set = [];
@@ -43,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $content = implode("\n", $final) . (count($final) ? "\n" : "");
 
+
     header("Content-Type: text/plain; charset=utf-8");
     header("Content-Disposition: attachment; filename=bloqueados.txt");
     echo $content;
@@ -53,11 +63,21 @@ include 'components/header.php';
 ?>
 
 <div class="card shadow-lg">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Gerar bloqueados.txt</h4>
+
+        <button type="button" class="btn btn-sm btn-warning" onclick="carregarBloqueios()">
+            Carregar bloqueios atuais
+        </button>
     </div>
 
     <div class="card-body">
+
+        <div class="alert alert-info mb-3">
+            Clique em <b>Carregar bloqueios atuais</b> para marcar automaticamente o que já está bloqueado no Squid.
+            Depois é só desmarcar o que você quer liberar e gerar o arquivo.
+        </div>
+
         <form method="post">
 
             <?php foreach ($sites as $categoria => $lista):
@@ -88,6 +108,9 @@ include 'components/header.php';
                     <?php foreach ($lista as $nome => $dominio):
 
                         $id = "d_" . md5($categoria . '|' . $nome . '|' . $dominio);
+
+                        // Para o favicon, é melhor sem o ponto
+                        $domForIcon = ltrim($dominio, '.');
                     ?>
                         <div class="col-md-4 mb-3">
                             <div class="border rounded p-3 h-100 shadow-sm site-card">
@@ -97,15 +120,17 @@ include 'components/header.php';
                                         name="domains[]"
                                         value="<?= htmlspecialchars($dominio) ?>"
                                         id="<?= $id ?>">
+
                                     <label class="form-check-label fw-semibold d-flex align-items-center gap-2" for="<?= $id ?>">
                                         <img
-                                            src="https://www.google.com/s2/favicons?sz=32&domain=<?= urlencode($dominio) ?>"
+                                            src="https://www.google.com/s2/favicons?sz=32&domain=<?= urlencode($domForIcon) ?>"
                                             width="20"
                                             height="20"
                                             alt="icon">
                                         <?= htmlspecialchars($nome) ?>
                                     </label>
                                 </div>
+
                                 <div class="text-muted small mt-1"><?= htmlspecialchars($dominio) ?></div>
                             </div>
                         </div>
