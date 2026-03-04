@@ -66,9 +66,11 @@ include 'components/header.php';
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
         <h4 class="mb-0">Gerar bloqueados.txt</h4>
 
-        <button type="button" class="btn btn-sm btn-warning" onclick="carregarBloqueios()">
-            Carregar bloqueios atuais
+        <button type="button" class="btn btn-sm btn-info" onclick="abrirSeletorArquivo()">
+            <i class="bi bi-upload"></i>Carregar arquivo (.txt)
         </button>
+
+        <input type="file" id="filePicker" accept=".txt,text/plain" style="display:none">
     </div>
 
     <div class="card-body">

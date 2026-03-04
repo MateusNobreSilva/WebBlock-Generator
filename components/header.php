@@ -34,10 +34,10 @@
         </div>
     </nav>
 
-    <button type="button" class="btn btn-sm btn-info" onclick="abrirSeletorArquivo()">
+    <!-- <button type="button" class="btn btn-sm btn-info" onclick="abrirSeletorArquivo()">
         Carregar arquivo (.txt)
     </button>
 
-    <input type="file" id="filePicker" accept=".txt,text/plain" style="display:none" />
+    <input type="file" id="filePicker" accept=".txt,text/plain" style="display:none" /> -->
 
     <div class="container py-4">
