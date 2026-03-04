@@ -2,7 +2,7 @@
   "Redes Sociais": {
     "Facebook": "facebook.com",
     "Instagram": "instagram.com",
-    "WhatsApp Web": ".whatsapp.com",
+    "WhatsApp Web": "whatsapp.com",
     "WhatsApp": "whatsapp.com",
     "X (Twitter)": "twitter.com",
     "TikTok": "tiktok.com",
@@ -17,7 +17,6 @@
     "Telegram": "telegram.org",
     "Messenger": "messenger.com",
     "Signal": "signal.org",
-    "Twitch": "twitch.tv",
     "BeReal": "bereal.com",
     "9GAG": "9gag.com"
   },
@@ -86,6 +85,13 @@
     "Deezer": "deezer.com",
     "SoundCloud": "soundcloud.com",
     "Twitch": "twitch.tv"
+  },
+  "Cloud Gaming": {
+    "Xbox Cloud": "xbox.com",
+    "Geforce Now": "nvidia.com",
+    "Boosteroid": "boosteroid.com",
+    "Amazon Luna": "luna.amazon.com",
+    "PlayStation": "playstation.com"
   },
   "VPN e Proxies": {
     "NordVPN": "nordvpn.com",
